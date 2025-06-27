@@ -153,6 +153,9 @@ func mapParameterToFlag(param string) string {
 		return ""
 	case "host":
 		return ""
+	// Kubernetes-specific parameters - exclude these from FormatArgs as they are handled separately
+	case "kubeCluster", "asUser", "asGroups", "kubeNamespace", "contextName", "requestReason", "disableAccessRequest":
+		return ""
 	default:
 		// Remove "Param" suffix if present
 		if strings.HasSuffix(param, "Param") {

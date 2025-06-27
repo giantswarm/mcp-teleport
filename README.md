@@ -26,10 +26,9 @@ MCP Teleport bridges the gap between AI assistants and Teleport infrastructure b
 - `teleport_list_ssh_nodes` - List available SSH nodes
 - `teleport_ssh` - Execute commands on remote SSH nodes
 
-### ☸️ **Kubernetes Tools** *(Coming Soon)*
-- `teleport_kube` - Kubernetes cluster operations
-- `teleport_kube_exec` - Execute commands in pods
-- `teleport_kube_logs` - View pod logs
+### ☸️ **Kubernetes Tools**
+- `teleport_kube_list_clusters` - List available Kubernetes clusters
+- `teleport_kube_login` - Login to Kubernetes clusters and update kubeconfig
 
 ### 🌐 **Application Tools** *(Coming Soon)*
 - `teleport_apps` - List available applications
@@ -156,6 +155,8 @@ mcp-teleport serve --debug --dry-run
    - "List all SSH nodes available through Teleport"
    - "SSH to server web-01 and run 'uptime'"
    - "Login to Teleport cluster teleport.example.com as user alice"
+   - "List all Kubernetes clusters I can access"
+   - "Login to the production Kubernetes cluster"
 
 ### Command Reference
 
@@ -230,6 +231,21 @@ AI: Uses teleport_ssh tool with destination and command
 Response: Command output from remote server
 ```
 
+### Kubernetes Operations
+```
+User: "List all Kubernetes clusters I can access"
+AI: Uses teleport_kube_list_clusters tool
+Response: Available K8s clusters with labels and metadata
+
+User: "Login to the production Kubernetes cluster"
+AI: Uses teleport_kube_login tool with kubeCluster parameter
+Response: Kubeconfig updated, kubectl access configured
+
+User: "Show me all clusters with environment=production label"
+AI: Uses teleport_kube_list_clusters with query parameter
+Response: Filtered list of production clusters
+```
+
 ## Development
 
 ### Project Structure
@@ -252,7 +268,7 @@ mcp-teleport/
 │   └── tools/             # MCP tool implementations
 │       ├── auth/          # Authentication tools
 │       ├── ssh/           # SSH tools
-│       ├── kube/          # Kubernetes tools (stubs)
+│       ├── kube/          # Kubernetes tools
 │       ├── database/      # Database tools (stubs)
 │       └── apps/          # Application tools (stubs)
 ├── .goreleaser.yaml       # Release configuration
@@ -410,7 +426,7 @@ make build
 
 ## Roadmap
 
-- [ ] **v1.1**: Complete Kubernetes tools implementation
+- [x] **v1.1**: Complete Kubernetes tools implementation ✅
 - [ ] **v1.2**: Database tools implementation  
 - [ ] **v1.3**: Application tools implementation
 - [ ] **v1.4**: Resource management tools
@@ -511,4 +527,93 @@ The `teleport_list_ssh_nodes` tool returns JSON formatted node information:
 ]
 ```
 
-This is parsed and presented in a user-friendly format showing hostname, labels, and dynamic command labels. 
+This is parsed and presented in a user-friendly format showing hostname, labels, and dynamic command labels.
+
+## Kubernetes Cluster Management
+
+### Kubernetes Cluster Discovery
+
+The `teleport_kube_list_clusters` tool provides comprehensive cluster discovery with filtering capabilities:
+
+#### Basic Usage
+```bash 
+# List all accessible clusters
+"No additional parameters needed"
+```
+
+#### Advanced Filtering
+```bash
+# Search by name or description
+"search": "production,staging"
+
+# Filter by labels 
+"labels": "env=prod,region=us-east"
+
+# Query with predicate language
+"query": "labels[\"environment\"] == \"production\""
+
+# Show detailed information
+"verbose": true
+
+# List from all Teleport clusters
+"all": true
+```
+
+#### Expected Output Format
+```
+Found 2 Kubernetes cluster(s):
+
+• prod-east-k8s (selected)
+  Labels: 2 available (use verbose=true to see details)
+
+• staging-west-k8s
+  Labels: env=staging, region=us-west-1
+
+Tip: Use verbose=true to see detailed label information for each cluster.
+```
+
+### Kubernetes Cluster Authentication
+
+The `teleport_kube_login` tool handles cluster authentication and kubeconfig management:
+
+#### Single Cluster Login
+```bash
+# Login to specific cluster
+"kubeCluster": "prod-east-k8s"
+
+# Login with custom context name
+"kubeCluster": "prod-east-k8s",
+"contextName": "my-prod-context"
+
+# Login with user/group impersonation
+"kubeCluster": "prod-east-k8s",
+"asUser": "admin",
+"asGroups": "system:masters"
+
+# Login with default namespace
+"kubeCluster": "prod-east-k8s", 
+"kubeNamespace": "production"
+```
+
+#### Batch Login (All Clusters)
+```bash
+# Login to all accessible clusters
+"all": true
+
+# Login to filtered clusters
+"all": true,
+"labels": "env=prod"
+
+# Login with custom context template
+"all": true,
+"contextName": "teleport-{{.KubeName}}"
+```
+
+#### Expected Behavior
+- Updates your local kubeconfig automatically
+- Provides clear success/failure feedback
+- Handles MFA challenges gracefully
+- Supports both single and batch operations
+- Only uses `tsh kube login` - no manual kubeconfig manipulation
+
+**Important**: Either `kubeCluster` or `all=true` must be specified, but not both. 
