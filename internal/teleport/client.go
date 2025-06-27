@@ -32,8 +32,12 @@ type ExecutionResult struct {
 
 // ExecuteCommand executes a tsh command with the given arguments
 func (c *Client) ExecuteCommand(command string, args []string) *ExecutionResult {
-	// Build the full command
-	cmdArgs := []string{command}
+	// Build the full command - split command into separate arguments
+	var cmdArgs []string
+	
+	// Split the command string into individual arguments
+	commandParts := strings.Fields(command)
+	cmdArgs = append(cmdArgs, commandParts...)
 	cmdArgs = append(cmdArgs, args...)
 
 	fullCommand := fmt.Sprintf("tsh %s", strings.Join(cmdArgs, " "))
