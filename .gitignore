@@ -104,4 +104,4 @@ tasks/
 
 # Build artifacts
 build/
-bin/ 
+bin/ mcp-teleport
