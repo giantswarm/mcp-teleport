@@ -436,7 +436,7 @@ func formatSSHNodesOutput(jsonOutput string) (string, error) {
 		// Extract from the real Teleport node structure
 		metadata, _ := node["metadata"].(map[string]interface{})
 		spec, _ := node["spec"].(map[string]interface{})
-		
+
 		if metadata == nil || spec == nil {
 			continue
 		}
@@ -486,7 +486,7 @@ func formatSSHNodesOutput(jsonOutput string) (string, error) {
 				labelKeys = append(labelKeys, k)
 			}
 			sort.Strings(labelKeys)
-			
+
 			var labelPairs []string
 			for _, k := range labelKeys {
 				labelPairs = append(labelPairs, fmt.Sprintf("%s=%v", k, allLabels[k]))
@@ -514,7 +514,7 @@ func formatResolveOutput(jsonOutput string) (string, error) {
 	// Extract from the real Teleport node structure
 	metadata, _ := resolveData["metadata"].(map[string]interface{})
 	spec, _ := resolveData["spec"].(map[string]interface{})
-	
+
 	if metadata == nil || spec == nil {
 		return "Invalid resolution result structure", nil
 	}
@@ -538,13 +538,13 @@ func formatResolveOutput(jsonOutput string) (string, error) {
 	// Show labels for additional context
 	if labels, ok := metadata["labels"].(map[string]interface{}); ok && len(labels) > 0 {
 		result.WriteString("Labels: ")
-		// Sort labels for consistent output  
+		// Sort labels for consistent output
 		var labelKeys []string
 		for k := range labels {
 			labelKeys = append(labelKeys, k)
 		}
 		sort.Strings(labelKeys)
-		
+
 		var labelPairs []string
 		for _, k := range labelKeys {
 			labelPairs = append(labelPairs, fmt.Sprintf("%s=%v", k, labels[k]))

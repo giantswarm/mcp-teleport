@@ -16,10 +16,10 @@ func TestDryRunCommandGeneration(t *testing.T) {
 	sc.SetDryRun(true)
 
 	tests := []struct {
-		name           string
-		handler        string
-		params         map[string]interface{}
-		expectedInCmd  []string // strings that should appear in the dry run output
+		name          string
+		handler       string
+		params        map[string]interface{}
+		expectedInCmd []string // strings that should appear in the dry run output
 	}{
 		{
 			name:    "enhanced ssh node listing with all parameters",
@@ -204,17 +204,17 @@ func extractTextFromContent(content interface{}) string {
 	if textContent, ok := content.(mcp.TextContent); ok {
 		return textContent.Text
 	}
-	
+
 	// Try to extract text from different possible content types
 	if textContent, ok := content.(interface{ GetText() string }); ok {
 		return textContent.GetText()
 	}
-	
+
 	// Check if it's a struct with Text field
 	if v, ok := content.(struct{ Text string }); ok {
 		return v.Text
 	}
-	
+
 	return ""
 }
 
@@ -401,7 +401,7 @@ func TestSSHRequiresCommand(t *testing.T) {
 	// Extract error message
 	errorText := extractTextFromContent(result.Content[0])
 	expectedMsg := "Command is required. Interactive shell sessions are not supported"
-	
+
 	if !strings.Contains(errorText, expectedMsg) {
 		t.Errorf("Expected error message to contain %q, got: %q", expectedMsg, errorText)
 	}
