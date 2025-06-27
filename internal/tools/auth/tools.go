@@ -101,4 +101,4 @@ func RegisterAuthTools(s *mcpserver.MCPServer, sc *server.ServerContext) error {
 	})
 
 	return nil
-} 
+}

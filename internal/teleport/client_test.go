@@ -124,4 +124,4 @@ func TestMapParameterToFlag(t *testing.T) {
 			}
 		})
 	}
-} 
+}

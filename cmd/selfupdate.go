@@ -87,4 +87,4 @@ func runSelfUpdate(checkOnly, force bool) error {
 
 	fmt.Printf("Successfully updated to version %s\n", latest.Version())
 	return nil
-} 
+}

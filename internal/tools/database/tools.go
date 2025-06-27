@@ -9,4 +9,4 @@ import (
 func RegisterDatabaseTools(s *mcpserver.MCPServer, sc *server.ServerContext) error {
 	// TODO: Implement database tools
 	return nil
-} 
+}

@@ -16,4 +16,4 @@ func newVersionCmd() *cobra.Command {
 			fmt.Printf("mcp-teleport version %s\n", rootCmd.Version)
 		},
 	}
-} 
+}

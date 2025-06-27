@@ -55,4 +55,4 @@ func init() {
 	rootCmd.AddCommand(newVersionCmd())
 	rootCmd.AddCommand(newSelfUpdateCmd())
 	rootCmd.AddCommand(newServeCmd())
-} 
+}
