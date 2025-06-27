@@ -35,7 +35,7 @@ func (c *Client) ExecuteCommand(command string, args []string) *ExecutionResult 
 	// Build the full command
 	cmdArgs := []string{command}
 	cmdArgs = append(cmdArgs, args...)
-	
+
 	fullCommand := fmt.Sprintf("tsh %s", strings.Join(cmdArgs, " "))
 
 	if c.dryRun {
@@ -144,6 +144,15 @@ func mapParameterToFlag(param string) string {
 		return "debug"
 	case "verboseParam":
 		return "verbose"
+	// Phase 1 enhanced parameters - exclude these from FormatArgs as they are handled separately
+	case "search", "query", "labels", "verbose", "all", "cluster":
+		return ""
+	case "localForward", "remoteForward", "dynamicForward", "openSSHOptions", "localCommand", "noRemoteExec", "logDir", "tty":
+		return ""
+	case "source", "destination", "recursive", "preserveAttributes", "quiet", "port":
+		return ""
+	case "host":
+		return ""
 	default:
 		// Remove "Param" suffix if present
 		if strings.HasSuffix(param, "Param") {
@@ -151,4 +160,4 @@ func mapParameterToFlag(param string) string {
 		}
 		return strings.ToLower(param)
 	}
-} 
+}

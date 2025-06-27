@@ -117,6 +117,20 @@ func (sc *ServerContext) Logger() Logger {
 	return sc.logger
 }
 
+// SetDryRun dynamically sets whether operations should be simulated
+func (sc *ServerContext) SetDryRun(enabled bool) {
+	sc.mutex.Lock()
+	defer sc.mutex.Unlock()
+	sc.dryRun = enabled
+}
+
+// SetDebugMode dynamically sets whether debug logging is enabled
+func (sc *ServerContext) SetDebugMode(enabled bool) {
+	sc.mutex.Lock()
+	defer sc.mutex.Unlock()
+	sc.debugMode = enabled
+}
+
 // Shutdown gracefully shuts down the server context
 func (sc *ServerContext) Shutdown() error {
 	sc.mutex.Lock()
@@ -148,4 +162,4 @@ func (sc *ServerContext) ExecuteCommand(command string, args []string) (string, 
 	// This would contain the actual command execution logic
 	// For now, we'll just return a placeholder
 	return "", fmt.Errorf("command execution not implemented yet")
-} 
+}

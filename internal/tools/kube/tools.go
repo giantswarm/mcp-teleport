@@ -9,4 +9,4 @@ import (
 func RegisterKubeTools(s *mcpserver.MCPServer, sc *server.ServerContext) error {
 	// TODO: Implement Kubernetes tools
 	return nil
-} 
+}

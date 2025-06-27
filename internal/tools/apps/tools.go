@@ -10,4 +10,3 @@ func RegisterAppTools(s *mcpserver.MCPServer, sc *server.ServerContext) error {
 	// TODO: Implement app tools
 	return nil
 }
- 

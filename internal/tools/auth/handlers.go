@@ -133,4 +133,4 @@ func handleListClusters(ctx context.Context, request mcp.CallToolRequest, sc *se
 	return &mcp.CallToolResult{
 		Content: content,
 	}, nil
-} 
+}

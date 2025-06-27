@@ -94,7 +94,7 @@ func runServe(transport string, nonDestructiveMode, dryRun bool, debugMode bool,
 	defer cancel()
 
 	// Create server context
-	serverContext, err := server.NewServerContext(shutdownCtx, 
+	serverContext, err := server.NewServerContext(shutdownCtx,
 		server.WithNonDestructiveMode(nonDestructiveMode),
 		server.WithDryRun(dryRun),
 		server.WithDebugMode(debugMode),
@@ -301,4 +301,4 @@ func runStreamableHTTPServer(mcpSrv *mcpserver.MCPServer, addr, endpoint string,
 
 	fmt.Println("HTTP server gracefully stopped")
 	return nil
-} 
+}

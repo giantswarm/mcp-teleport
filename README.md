@@ -12,8 +12,7 @@ MCP Teleport bridges the gap between AI assistants and Teleport infrastructure b
 
 - **Authentication**: Login and session management
 - **SSH Access**: Secure shell access to remote nodes
-- **Kubernetes**: Cluster operations and workload management
-- **Database Access**: Secure database connections
+- **Kubernetes**: Cluster discovery & authentication
 - **Application Access**: Web application tunneling
 
 ## Features
@@ -31,10 +30,6 @@ MCP Teleport bridges the gap between AI assistants and Teleport infrastructure b
 - `teleport_kube` - Kubernetes cluster operations
 - `teleport_kube_exec` - Execute commands in pods
 - `teleport_kube_logs` - View pod logs
-
-### 🗄️ **Database Tools** *(Coming Soon)*
-- `teleport_database` - Database connection management
-- `teleport_db_connect` - Connect to databases
 
 ### 🌐 **Application Tools** *(Coming Soon)*
 - `teleport_apps` - List available applications
@@ -110,7 +105,7 @@ go install github.com/giantswarm/mcp-teleport@latest
 
 #### Start with Default Settings (stdio)
 ```bash
-mcp-teleport serve
+mcp-teleport
 ```
 
 #### Web-based Deployment (SSE)
@@ -166,7 +161,7 @@ mcp-teleport serve --debug --dry-run
 
 ```bash
 # Server commands
-mcp-teleport serve                    # Start with stdio transport
+mcp-teleport                          # Start with stdio transport
 mcp-teleport serve --transport=sse    # Start with SSE transport
 mcp-teleport serve --debug            # Enable debug logging
 mcp-teleport serve --dry-run          # Simulate operations
@@ -444,3 +439,76 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Made with ❤️ by [Giant Swarm](https://giantswarm.io)** 
+
+## SSH Command Execution
+
+The `teleport_ssh` tool supports two destination formats:
+
+### 1. Direct Hostname Targeting
+```bash
+# Target a specific node
+"destination": "root@hostname"
+```
+
+### 2. Label Selector Targeting (Multi-Node)
+```bash
+# Target all nodes matching label criteria
+"destination": "root@role=worker,env=prod"
+"destination": "root@cluster=wallaby,role=control-plane"
+```
+
+**Important:** Only one-time commands are supported. Interactive shell sessions are not supported via MCP.
+
+### Expected Output Formats
+
+**Single Node Output:**
+```
+total 408
+drwxr-xr-x. 8 root root  4096 Mar 26 12:18 kubernetes
+drwxr-xr-x. 1 root root  4096 Mar 26 12:18 sysctl.d
+```
+
+**Multi-Node Output (Label Selector):**
+```
+WARNING: Multiple nodes matched label selector, running command on all.
+Running command on wallaby-9wldd:
+Running command on wallaby-rd565:
+[wallaby-9wldd]  07:15:15 up 92 days, 18:59,  0 user,  load average: 1.71, 1.55, 1.47
+[wallaby-rd565]  07:15:15 up 92 days, 19:05,  0 user,  load average: 1.10, 0.92, 0.90
+
+[wallaby-9wldd] success
+[wallaby-rd565] success
+
+2 host(s) succeeded; 0 host(s) failed
+```
+
+## SSH Node Listing
+
+The `teleport_list_ssh_nodes` tool returns JSON formatted node information:
+
+```json
+[
+  {
+    "kind": "node",
+    "version": "v2",
+    "metadata": {
+      "name": "41c3ee63-af98-44b1-9ec6-14cb19ba7e6b",
+      "labels": {
+        "azure/environment": "prod",
+        "cluster": "wallaby",
+        "role": "control-plane"
+      }
+    },
+    "spec": {
+      "hostname": "wallaby-9wldd",
+      "addr": "",
+      "cmd_labels": {
+        "arch": {"result": "x86_64"},
+        "role": {"result": "control-plane"}
+      }
+    }
+  }
+]
+```
+
+This is parsed and presented in a user-friendly format showing hostname, labels, and dynamic command labels. 
