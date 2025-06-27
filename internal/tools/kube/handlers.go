@@ -178,7 +178,7 @@ func handleKubeLogin(ctx context.Context, request mcp.CallToolRequest, sc *serve
 	// Validate that either kubeCluster or --all is specified
 	kubeCluster, hasKubeCluster := params["kubeCluster"].(string)
 	all, hasAll := params["all"].(bool)
-	
+
 	if !hasKubeCluster && (!hasAll || !all) {
 		return &mcp.CallToolResult{
 			Content: []mcp.Content{
@@ -226,9 +226,9 @@ func handleKubeLogin(ctx context.Context, request mcp.CallToolRequest, sc *serve
 	} else {
 		successMessage.WriteString(fmt.Sprintf("Successfully logged in to Kubernetes cluster: %s\n", kubeCluster))
 	}
-	
+
 	successMessage.WriteString("Your kubeconfig has been updated. You can now use kubectl to interact with the cluster(s).\n\n")
-	
+
 	if result.Output != "" {
 		successMessage.WriteString("Command output:\n")
 		successMessage.WriteString(result.Output)
@@ -272,7 +272,7 @@ func formatKubeClustersOutput(jsonOutput string, params map[string]interface{}) 
 
 	for _, cluster := range clusters {
 		result.WriteString(fmt.Sprintf("• %s", cluster.KubeClusterName))
-		
+
 		if cluster.Selected {
 			result.WriteString(" (selected)")
 		}
@@ -308,4 +308,4 @@ func formatKubeClustersOutput(jsonOutput string, params map[string]interface{}) 
 	}
 
 	return result.String(), nil
-} 
+}

@@ -294,12 +294,12 @@ func TestFormatKubeClustersOutput(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := formatKubeClustersOutput(tt.jsonOutput, tt.params)
-			
+
 			if tt.wantErr && err == nil {
 				t.Errorf("formatKubeClustersOutput() expected error but got none")
 				return
 			}
-			
+
 			if !tt.wantErr && err != nil {
 				t.Errorf("formatKubeClustersOutput() unexpected error = %v", err)
 				return
@@ -325,6 +325,6 @@ func createTestRequest(params map[string]interface{}) mcp.CallToolRequest {
 
 // Helper function for case-insensitive string contains check
 func stringContains(haystack, needle string) bool {
-	return len(haystack) >= len(needle) && (haystack == needle || 
+	return len(haystack) >= len(needle) && (haystack == needle ||
 		strings.Contains(strings.ToLower(haystack), strings.ToLower(needle)))
-} 
+}
