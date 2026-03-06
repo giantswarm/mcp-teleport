@@ -4,7 +4,7 @@ go 1.24.11
 
 require (
 	github.com/creativeprojects/go-selfupdate v1.5.2
-	github.com/mark3labs/mcp-go v0.44.1
+	github.com/mark3labs/mcp-go v0.45.0
 	github.com/spf13/cobra v1.10.2
 )
 
