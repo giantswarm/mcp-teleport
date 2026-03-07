@@ -1,0 +1,21 @@
+apiVersion: v2
+name: mcp-teleport
+description: A Helm chart for mcp-teleport - Model Context Protocol server for Teleport
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/giantswarm/mcp-teleport
+icon: https://s.giantswarm.io/app-icons/giantswarm/1/dark.svg
+sources:
+  - https://github.com/giantswarm/mcp-teleport
+keywords:
+  - mcp
+  - teleport
+  - model-context-protocol
+maintainers:
+  - name: Giant Swarm
+    email: team-planeteers@giantswarm.io
+annotations:
+  io.giantswarm.application.team: team-planeteers
+  io.giantswarm.application.audience: customers
+  io.giantswarm.application.managed: "true"
