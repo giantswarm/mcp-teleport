@@ -1,0 +1,15 @@
+.git
+.github
+.circleci
+.cursor
+.goreleaser.yaml
+.dockerignore
+Dockerfile
+helm/
+README.md
+LICENSE
+Makefile
+renovate.json
+*.md
+*.swp
+*.bak
